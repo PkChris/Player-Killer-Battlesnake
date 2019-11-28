@@ -45,7 +45,7 @@ app.post('/move', (request, response) => {
 
   // Response data
   const data = {
-    move: direction, // one of: ['up','down','left','right']
+    move: 'right', // one of: ['up','down','left','right']
   }
 
   return response.json(data)
