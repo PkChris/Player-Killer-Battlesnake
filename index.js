@@ -27,7 +27,9 @@ app.post('/start', (request, response) => {
 
   // Response data
   const data = {
-    color: '#DFFF00',
+    "color": "#374054",
+    "headType": "evil",
+    "tailType": "bolt"
   }
 
   return response.json(data)
@@ -37,12 +39,12 @@ app.post('/start', (request, response) => {
 app.post('/move', (request, response) => {
   // NOTE: Do something here to generate your move
 
-  let directions = ['up', 'down', 'left', 'right'];
+  var directions = ['up', 'down', 'left', 'right'];
   shuffle(directions);
 
   // Response data
   const data = {
-    move: directions[0], // one of: ['up','down','left','right']
+    move: string(directions[0]), // one of: ['up','down','left','right']
   }
 
   return response.json(data)
