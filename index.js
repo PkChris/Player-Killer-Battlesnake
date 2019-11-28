@@ -41,10 +41,11 @@ app.post('/move', (request, response) => {
 
   var directions = ['up', 'down', 'left', 'right'];
   shuffle(directions);
+  var direction = directions[0];
 
   // Response data
   const data = {
-    move: string(directions[0]), // one of: ['up','down','left','right']
+    move: direction, // one of: ['up','down','left','right']
   }
 
   return response.json(data)
