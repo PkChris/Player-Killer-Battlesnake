@@ -41,7 +41,7 @@ app.post('/move', (request, response) => {
 
   var directions = ['up', 'down', 'left', 'right'];
   shuffle(directions);
-  var direction = directions[0];
+  var direction = 'right';
 
   // Response data
   const data = {
