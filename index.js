@@ -43,6 +43,8 @@ app.post('/move', (request, response) => {
   // Board information
   var width = request.body.board.width - 1;
   var height = request.body.board.height - 1;
+  var widthHalf = width / 2;
+  var heightHalf = height / 2;
   var head = request.body.you.body[0];
   var snakes = request.body.board.snakes;
   var food = request.body.board.food;
@@ -266,18 +268,42 @@ app.post('/move', (request, response) => {
     }
   }
 
-  // Keep snake on board
+  // Keep snake on board and make him avoid corners
   if (head.y == 0) {
     up = false;
+
+    if (head.x < widthHalf) {
+      moveLeftPriority++;
+    } else {
+      moveRightPriority++;
+    }
   }
   if (head.y == height) {
     down = false;
+
+    if (head.x < widthHalf) {
+      moveLeftPriority++;
+    } else {
+      moveRightPriority++;
+    }
   }
   if (head.x == 0) {
     left = false;
+
+    if (head.y < heightHalf) {
+      moveUpPriority++;
+    } else {
+      moveDownPriority++;
+    }
   }
   if (head.x == width) {
     right = false;
+
+    if (head.y < heightHalf) {
+      moveUpPriority++;
+    } else {
+      moveDownPriority++;
+    }
   }
 
   // Seek out food
