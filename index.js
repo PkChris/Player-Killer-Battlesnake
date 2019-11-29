@@ -107,7 +107,7 @@ app.post('/move', (request, response) => {
   // Store safe movements in array
   var directions = [];
 
-  // Check for food directly next to snake's head
+  // Eat food directly next to snake's head
   for (f = 0; f < food.length; f++) {
     if (moveUp.x == food[f].x && moveUp.y == food[f].y) {
       up = 'food';
@@ -123,6 +123,30 @@ app.post('/move', (request, response) => {
     }
   }
 
+  // Head towards food in same row or column as snake's head
+  for (f = 0; f < food.length; f++) {
+    if (head.x == food[f].x && head.x > food[f].x) {
+      if (up) {
+        up = 'food';
+      }
+    }
+    if (head.x == food[f].x && head.x < food[f].x) {
+      if (down) {
+        down = 'food';
+      }
+    }
+    if (head.y == food[f].y && head.y > food[f].y) {
+      if (left) {
+        left = 'food';
+      }
+    }
+    if (head.y == food[f].y && head.y < food[f].y) {
+      if (right) {
+        right = 'food';
+      }
+    }
+  }
+
   // Sophisticated decision chooser
   function sophisticated(a) {
     var j, x, i;
@@ -135,7 +159,7 @@ app.post('/move', (request, response) => {
     return a;
   }
 
-  // Go for the food first else use sophisticated logic
+  // Go for the food first else use sophisticated decision chooser
   if (up == 'food') {
     directions.push('up');
   } else if (down == 'food') {
