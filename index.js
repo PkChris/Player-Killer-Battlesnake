@@ -107,8 +107,9 @@ app.post('/move', (request, response) => {
   // Store safe movements in array
   var directions = [];
 
-  // Eat food directly next to snake's head
+  // Seek out food
   for (f = 0; f < food.length; f++) {
+    // Eat food directly next to snake's head
     if (moveUp.x == food[f].x && moveUp.y == food[f].y) {
       up = 'food';
     }
@@ -121,26 +122,24 @@ app.post('/move', (request, response) => {
     if (moveRight.x == food[f].x && moveRight.y == food[f].y) {
       right = 'food';
     }
-  }
 
-  // Head towards food in same row or column as snake's head
-  for (f = 0; f < food.length; f++) {
-    if (head.x == food[f].x && head.x > food[f].x) {
+    // Head towards food in same row or column as snake's head
+    if (head.x == food[f].x && head.y > food[f].y) {
       if (up) {
         up = 'food';
       }
     }
-    if (head.x == food[f].x && head.x < food[f].x) {
+    if (head.x == food[f].x && head.y < food[f].y) {
       if (down) {
         down = 'food';
       }
     }
-    if (head.y == food[f].y && head.y > food[f].y) {
+    if (head.y == food[f].y && head.x > food[f].x) {
       if (left) {
         left = 'food';
       }
     }
-    if (head.y == food[f].y && head.y < food[f].y) {
+    if (head.y == food[f].y && head.x < food[f].x) {
       if (right) {
         right = 'food';
       }
@@ -159,7 +158,7 @@ app.post('/move', (request, response) => {
     return a;
   }
 
-  // Go for the food first else use sophisticated decision chooser
+  // Go for the food else use sophisticated decision chooser
   if (up == 'food') {
     directions.push('up');
   } else if (down == 'food') {
