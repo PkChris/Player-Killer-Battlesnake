@@ -45,6 +45,7 @@ app.post('/move', (request, response) => {
   var height = request.body.board.height - 1;
   var head = request.body.you.body[0];
   var snakes = request.body.board.snakes;
+  var snakes = request.body.board.snakes;
 
   console.log(width);
   console.log(height);
@@ -96,16 +97,16 @@ app.post('/move', (request, response) => {
   }
 
   // Keep snake on board
-  if (head.y == '0') {
+  if (head.y == 0) {
     up = false;
   }
   if (head.y == height) {
     down = false;
   }
-  if (head.x == '0') {
+  if (head.x == 0) {
     left = false;
   }
-  if (head.y == width) {
+  if (head.x == width) {
     right = false;
   }
 
