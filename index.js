@@ -70,6 +70,28 @@ app.post('/move', (request, response) => {
     x: head.x + 1,
     y: head.y
   }
+  var moveUpFurther = {
+    x: head.x,
+    y: head.y - 2
+  }
+  var moveDownFurther = {
+    x: head.x,
+    y: head.y + 2
+  }
+  var moveLeftFurther = {
+    x: head.x - 2,
+    y: head.y
+  }
+  var moveRightFurther = {
+    x: head.x + 2,
+    y: head.y
+  }
+
+  // Movement priorities. Higher numbers are worse decisions
+  var moveUpPriority = 0;
+  var moveDownPriority = 0;
+  var moveLeftPriority = 0;
+  var moveRightPriority = 0;
 
   // Keep snake from touching other snakes or eating itself
   for (s = 0; s < snakes.length; s++) {
@@ -86,6 +108,20 @@ app.post('/move', (request, response) => {
       }
       if (moveRight.x == snakeBody[b].x && moveRight.y == snakeBody[b].y) {
         right = false;
+      }
+
+      // Tally up movement priorities
+      if (moveUpFurther.x == snakeBody[b].x && moveUpFurther.y == snakeBody[b].y) {
+        moveUpPriority++;
+      }
+      if (moveDownFurther.x == snakeBody[b].x && moveDownFurther.y == snakeBody[b].y) {
+        moveDownPriority++;
+      }
+      if (moveLeftFurther.x == snakeBody[b].x && moveLeftFurther.y == snakeBody[b].y) {
+        moveLeftPriority++;
+      }
+      if (moveRightFurther.x == snakeBody[b].x && moveRightFurther.y == snakeBody[b].y) {
+        moveRightPriority++;
       }
     }
   }
@@ -104,9 +140,6 @@ app.post('/move', (request, response) => {
     right = false;
   }
 
-  // Store safe movements in array
-  var directions = [];
-
   // Seek out food
   for (f = 0; f < food.length; f++) {
     // Eat food directly next to snake's head
@@ -123,30 +156,30 @@ app.post('/move', (request, response) => {
       right = 'food';
     }
 
-    // Head towards food in same row or column as snake's head
+    // Head towards food in same row or column as snake's head and priority is at 0
     if (head.x == food[f].x && head.y > food[f].y) {
-      if (up) {
+      if (up == true && moveUpPriority == 0) {
         up = 'food';
       }
     }
     if (head.x == food[f].x && head.y < food[f].y) {
-      if (down) {
+      if (down == true && moveDownPriority == 0) {
         down = 'food';
       }
     }
     if (head.y == food[f].y && head.x > food[f].x) {
-      if (left) {
+      if (left == true && moveLeftPriority == 0) {
         left = 'food';
       }
     }
     if (head.y == food[f].y && head.x < food[f].x) {
-      if (right) {
+      if (right == true && moveRightPriority == 0) {
         right = 'food';
       }
     }
   }
 
-  // Sophisticated decision chooser
+  /* Sophisticated decision chooser
   function sophisticated(a) {
     var j, x, i;
     for (i = a.length - 1; i > 0; i--) {
@@ -156,37 +189,70 @@ app.post('/move', (request, response) => {
         a[j] = x;
     }
     return a;
-  }
+  }*/
 
-  // Go for the food else use sophisticated decision chooser
+  var safeDirections = [];
+  var priorities = [];
+  var finalDirections = [];
+
+  // Go for the food else store safe directions in array
   if (up == 'food') {
-    directions.push('up');
+    safeDirections.push('up');
   } else if (down == 'food') {
-    directions.push('down');
+    safeDirections.push('down');
   } else if (left == 'food') {
-    directions.push('left');
+    safeDirections.push('left');
   } else if (right == 'food') {
-    directions.push('right');
+    safeDirections.push('right');
   } else {
     if (up) {
-      directions.push('up');
+      safeDirections.push('up');
     }
     if (down) {
-      directions.push('down');
+      safeDirections.push('down');
     }
     if (left) {
-      directions.push('left');
+      safeDirections.push('left');
     }
     if (right) {
-      directions.push('right');
+      safeDirections.push('right');
     }
 
-    sophisticated(directions);
+    //sophisticated(directions);
   }
+
+  // Store priorities in array
+  if (up) {
+    priorities.push(moveUpPriority);
+  }
+  if (down) {
+    priorities.push(moveDownPriority);
+  }
+  if (left) {
+    priorities.push(moveLeftPriority);
+  }
+  if (right) {
+    priorities.push(moveRightPriority);
+  }
+
+  // Match priorities to safe directions
+  for (i = 0; i < safeDirections.length; i++) {
+    finalDirections.push([safeDirections[i], priorities[i]]);
+  }
+
+  // Sort descending by Priority
+  function sortDescendingSecondColumn(a, b) {
+    if (a[1] === b[1]) {
+      return 0;
+    } else {
+      return (a[1] < b[1]) ? -1 : 1;
+    }
+  }
+  finalDirections.sort(sortDescendingSecondColumn);
 
   // Response data
   const data = {
-    move: directions[0], // one of: ['up','down','left','right']
+    move: finalDirections[0][0], // one of: ['up','down','left','right']
   }
 
   return response.json(data)
