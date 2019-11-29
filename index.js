@@ -38,7 +38,100 @@ app.post('/start', (request, response) => {
 // Handle POST request to '/move'
 app.post('/move', (request, response) => {
   // NOTE: Do something here to generate your move
-  function shuffle(a) {
+  console.log(request.body);
+
+  // Board information
+  var width = request.body.board.width - 1;
+  var height = request.body.board.height - 1;
+  var head = request.body.you.body[0];
+  var snakes = request.body.board.snakes;
+
+  console.log(width);
+  console.log(height);
+  console.log(head);
+  console.log(snakes);
+  console.log(request.body);
+
+  // Directions
+  var up = true;
+  var down = true;
+  var left = true;
+  var right = true;
+
+  // Future movement coordinates
+  var moveUp = {
+    x: head.x,
+    y: head.y - 1
+  }
+  var moveDown = {
+    x: head.x,
+    y: head.y + 1
+  }
+  var moveLeft = {
+    x: head.x - 1,
+    y: head.y
+  }
+  var moveRight = {
+    x: head.x + 1,
+    y: head.y
+  }
+
+  // Keep snake from touching other snakes or eating itself
+  for (s = 0; s < snakes.length; s++) {
+    snakeBody = snakes[s].body;
+    for (b = 0; b < snakeBody.length; b++) {
+      if (moveUp.x == snakeBody[b].x && moveUp.y == snakeBody[b].y) {
+        up = false;
+      }
+      if (moveDown.x == snakeBody[b].x && moveDown.y == snakeBody[b].y) {
+        down = false;
+      }
+      if (moveLeft.x == snakeBody[b].x && moveLeft.y == snakeBody[b].y) {
+        left = false;
+      }
+      if (moveRight.x == snakeBody[b].x && moveRight.y == snakeBody[b].y) {
+        right = false;
+      }
+    }
+  }
+
+  // Keep snake on board
+  if (head.y == '0') {
+    up = false;
+  }
+  if (head.y == height) {
+    down = false;
+  }
+  if (head.x == '0') {
+    left = false;
+  }
+  if (head.y == width) {
+    right = false;
+  }
+
+  // Store safe movements in array
+  var directions = [];
+
+  if (up) {
+    directions.push('up');
+  }
+  if (down) {
+    directions.push('down');
+  }
+  if (left) {
+    directions.push('left');
+  }
+  if (right) {
+    directions.push('right');
+  }
+
+  console.log(up);
+  console.log(down);
+  console.log(left);
+  console.log(right);
+
+  // Use sophisticated logic to determine the best course of action
+  function sophisticated(a) {
     var j, x, i;
     for (i = a.length - 1; i > 0; i--) {
         j = Math.floor(Math.random() * (i + 1));
@@ -48,10 +141,9 @@ app.post('/move', (request, response) => {
     }
     return a;
   }
+  sophisticated(directions);
 
-  var directions = ['up', 'down', 'left', 'right'];
-
-  shuffle(directions);
+  console.log(directions);
 
   // Response data
   const data = {
