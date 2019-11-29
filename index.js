@@ -45,13 +45,7 @@ app.post('/move', (request, response) => {
   var height = request.body.board.height - 1;
   var head = request.body.you.body[0];
   var snakes = request.body.board.snakes;
-  var snakes = request.body.board.snakes;
-
-  console.log(width);
-  console.log(height);
-  console.log(head);
-  console.log(snakes);
-  console.log(request.body);
+  var food = request.body.board.food;
 
   // Directions
   var up = true;
@@ -113,25 +107,23 @@ app.post('/move', (request, response) => {
   // Store safe movements in array
   var directions = [];
 
-  if (up) {
-    directions.push('up');
-  }
-  if (down) {
-    directions.push('down');
-  }
-  if (left) {
-    directions.push('left');
-  }
-  if (right) {
-    directions.push('right');
+  // Check for food directly next to snake's head
+  for (f = 0; f < food.length; f++) {
+    if (moveUp.x == food[f].x && moveUp.y == food[f].y) {
+      up = 'food';
+    }
+    if (moveDown.x == food[f].x && moveDown.y == food[f].y) {
+      down = 'food';
+    }
+    if (moveLeft.x == food[f].x && moveLeft.y == food[f].y) {
+      left = 'food';
+    }
+    if (moveRight.x == food[f].x && moveRight.y == food[f].y) {
+      right = 'food';
+    }
   }
 
-  console.log(up);
-  console.log(down);
-  console.log(left);
-  console.log(right);
-
-  // Use sophisticated logic to determine the best course of action
+  // Sophisticated decision chooser
   function sophisticated(a) {
     var j, x, i;
     for (i = a.length - 1; i > 0; i--) {
@@ -142,9 +134,32 @@ app.post('/move', (request, response) => {
     }
     return a;
   }
-  sophisticated(directions);
 
-  console.log(directions);
+  // Go for the food first else use sophisticated logic
+  if (up == 'food') {
+    directions.push('up');
+  } else if (down == 'food') {
+    directions.push('down');
+  } else if (left == 'food') {
+    directions.push('left');
+  } else if (right == 'food') {
+    directions.push('right');
+  } else {
+    if (up) {
+      directions.push('up');
+    }
+    if (down) {
+      directions.push('down');
+    }
+    if (left) {
+      directions.push('left');
+    }
+    if (right) {
+      directions.push('right');
+    }
+
+    sophisticated(directions);
+  }
 
   // Response data
   const data = {
