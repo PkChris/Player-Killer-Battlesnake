@@ -551,6 +551,12 @@ app.post('/move', (request, response) => {
     }
   }
 
+  // Prevent multiple food from stacking priority on the same row and column
+  var foodUpPriority = false;
+  var foodDownPriority = false;
+  var foodLeftPriority = false;
+  var foodRightPriority = false;
+
   // Seek out food
   for (f = 0; f < food.length; f++) {
     // Eat adjacent food
@@ -568,25 +574,21 @@ app.post('/move', (request, response) => {
     }
 
     // Head towards food in same row or column
-    if (head.x == food[f].x && head.y > food[f].y) {
-      if (up == true) {
-        moveUpPriority--;
-      }
+    if (head.x == food[f].x && head.y > food[f].y && up == true && foodUpPriority == false) {
+      moveUpPriority--;
+      foodUpPriority = true;
     }
-    if (head.x == food[f].x && head.y < food[f].y) {
-      if (down == true) {
-        moveDownPriority--;
-      }
+    if (head.x == food[f].x && head.y < food[f].y && down == true && foodDownPriority == false) {
+      moveDownPriority--;
+      foodDownPriority = true;
     }
-    if (head.y == food[f].y && head.x > food[f].x) {
-      if (left == true) {
-        moveLeftPriority--;
-      }
+    if (head.y == food[f].y && head.x > food[f].x && left == true && foodLeftPriority == false) {
+      moveLeftPriority--;
+      foodLeftPriority = true;
     }
-    if (head.y == food[f].y && head.x < food[f].x) {
-      if (right == true) {
-        moveRightPriority--;
-      }
+    if (head.y == food[f].y && head.x < food[f].x && right == true && foodRightPriority == false) {
+      moveRightPriority--;
+      foodRightPriority = true;
     }
   }
 
