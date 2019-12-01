@@ -162,12 +162,14 @@ app.post('/move', (request, response) => {
   var moveLeftPriority = 10;
   var moveRightPriority = 10;
 
+  var dangerousSnakeHeads = [];
+
   // Keep snake from touching other snakes or eating itself
   for (s = 0; s < snakes.length; s++) {
     snakeBody = snakes[s].body;
     for (b = 0; b < snakeBody.length; b++) {
-      // Eat adjacent snake heads if health permits
       if (snakeBody[0].x == snakeBody[b].x && snakeBody[0].y == snakeBody[b].y) {
+        // Eat adjacent snake heads if length permits
         if (body.length > snakeBody.length) {
           if (moveUp.x == snakeBody[b].x && moveUp.y == snakeBody[b].y) {
             up = 'food';
@@ -264,6 +266,9 @@ app.post('/move', (request, response) => {
             moveDownPriority--;
           }
         } else {
+          // Store dangerous snake head locations
+          dangerousSnakeHeads.push(snakeBody[b]);
+
           // Avoid more powerful snake heads
           if (moveUp.x == snakeBody[b].x && moveUp.y == snakeBody[b].y) {
             moveUpPriority++;
@@ -581,6 +586,51 @@ app.post('/move', (request, response) => {
     if (head.y == food[f].y && head.x < food[f].x) {
       if (right == true) {
         moveRightPriority--;
+      }
+    }
+  }
+
+  // Don't get killed by dangerous snake heads going for food
+  for (d = 0; d < dangerousSnakeHeads.length; d++) {
+    if (up == 'food') {
+      if (moveUpFurther.x == dangerousSnakeHeads[d].x && moveUpFurther.y == dangerousSnakeHeads[d].y) {
+        up = false;
+      }
+      if (moveUpLeft.x == dangerousSnakeHeads[d].x && moveUpLeft.y == dangerousSnakeHeads[d].y) {
+        up = false;
+      }
+      if (moveUpRight.x == dangerousSnakeHeads[d].x && moveUpRight.y == dangerousSnakeHeads[d].y) {
+        up = false;
+      }
+    } else if (down == 'food') {
+      if (moveDownFurther.x == dangerousSnakeHeads[d].x && moveDownFurther.y == dangerousSnakeHeads[d].y) {
+        down = false;
+      }
+      if (moveDownLeft.x == dangerousSnakeHeads[d].x && moveDownLeft.y == dangerousSnakeHeads[d].y) {
+        down = false;
+      }
+      if (moveDownRight.x == dangerousSnakeHeads[d].x && moveDownRight.y == dangerousSnakeHeads[d].y) {
+        down = false;
+      }
+    } else if (left == 'food') {
+      if (moveLeftFurther.x == dangerousSnakeHeads[d].x && moveLeftFurther.y == dangerousSnakeHeads[d].y) {
+        left = false;
+      }
+      if (moveUpLeft.x == dangerousSnakeHeads[d].x && moveUpLeft.y == dangerousSnakeHeads[d].y) {
+        left = false;
+      }
+      if (moveDownLeft.x == dangerousSnakeHeads[d].x && moveDownLeft.y == dangerousSnakeHeads[d].y) {
+        left = false;
+      }
+    } else if (right == 'food') {
+      if (moveRightFurther.x == dangerousSnakeHeads[d].x && moveRightFurther.y == dangerousSnakeHeads[d].y) {
+        right = false;
+      }
+      if (moveUpRight.x == dangerousSnakeHeads[d].x && moveUpRight.y == dangerousSnakeHeads[d].y) {
+        right = false;
+      }
+      if (moveDownRight.x == dangerousSnakeHeads[d].x && moveDownRight.y == dangerousSnakeHeads[d].y) {
+        right = false;
       }
     }
   }
