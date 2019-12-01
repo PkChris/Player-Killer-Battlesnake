@@ -223,6 +223,140 @@ app.post('/move', (request, response) => {
             moveDownPriority--;
             moveRightPriority--;
           }
+          if (moveUpLeftFurther.x == snakeBody[b].x && moveUpLeftFurther.y == snakeBody[b].y) {
+            moveUpPriority--;
+            moveLeftPriority--;
+            moveLeftPriority--;
+          }
+          if (moveDownLeftFurther.x == snakeBody[b].x && moveDownLeftFurther.y == snakeBody[b].y) {
+            moveDownPriority--;
+            moveLeftPriority--;
+            moveLeftPriority--;
+          }
+          if (moveLeftUpFurther.x == snakeBody[b].x && moveLeftUpFurther.y == snakeBody[b].y) {
+            moveLeftPriority--;
+            moveUpPriority--;
+            moveUpPriority--;
+          }
+          if (moveRightUpFurther.x == snakeBody[b].x && moveRightUpFurther.y == snakeBody[b].y) {
+            moveRightPriority--;
+            moveUpPriority--;
+            moveUpPriority--;
+          }
+          if (moveUpRightFurther.x == snakeBody[b].x && moveUpRightFurther.y == snakeBody[b].y) {
+            moveUpPriority--;
+            moveRightPriority--;
+            moveRightPriority--;
+          }
+          if (moveDownRightFurther.x == snakeBody[b].x && moveDownRightFurther.y == snakeBody[b].y) {
+            moveDownPriority--;
+            moveRightPriority--;
+            moveRightPriority--;
+          }
+          if (moveLeftDownFurther.x == snakeBody[b].x && moveLeftDownFurther.y == snakeBody[b].y) {
+            moveLeftPriority--;
+            moveDownPriority--;
+            moveDownPriority--;
+          }
+          if (moveRightDownFurther.x == snakeBody[b].x && moveRightDownFurther.y == snakeBody[b].y) {
+            moveRightPriority--;
+            moveDownPriority--;
+            moveDownPriority--;
+          }
+        } else {
+          // Avoid more powerful snake heads
+          if (moveUp.x == snakeBody[b].x && moveUp.y == snakeBody[b].y) {
+            moveUpPriority++;
+          }
+          if (moveDown.x == snakeBody[b].x && moveDown.y == snakeBody[b].y) {
+            moveDownPriority++;
+          }
+          if (moveLeft.x == snakeBody[b].x && moveLeft.y == snakeBody[b].y) {
+            moveLeftPriority++;
+          }
+          if (moveRight.x == snakeBody[b].x && moveRight.y == snakeBody[b].y) {
+            moveRightPriority++;
+          }
+          if (moveUpFurther.x == snakeBody[b].x && moveUpFurther.y == snakeBody[b].y) {
+            moveUpPriority++;
+          }
+          if (moveDownFurther.x == snakeBody[b].x && moveDownFurther.y == snakeBody[b].y) {
+            moveDownPriority++;
+          }
+          if (moveLeftFurther.x == snakeBody[b].x && moveLeftFurther.y == snakeBody[b].y) {
+            moveLeftPriority++;
+          }
+          if (moveRightFurther.x == snakeBody[b].x && moveRightFurther.y == snakeBody[b].y) {
+            moveRightPriority++;
+          }
+          if (moveUpEvenFurther.x == snakeBody[b].x && moveUpEvenFurther.y == snakeBody[b].y) {
+            moveUpPriority++;
+          }
+          if (moveDownEvenFurther.x == snakeBody[b].x && moveDownEvenFurther.y == snakeBody[b].y) {
+            moveDownPriority++;
+          }
+          if (moveLeftEvenFurther.x == snakeBody[b].x && moveLeftEvenFurther.y == snakeBody[b].y) {
+            moveLeftPriority++;
+          }
+          if (moveRightEvenFurther.x == snakeBody[b].x && moveRightEvenFurther.y == snakeBody[b].y) {
+            moveRightPriority++;
+          }
+          if (moveUpLeft.x == snakeBody[b].x && moveUpLeft.y == snakeBody[b].y) {
+            moveUpPriority++;
+            moveLeftPriority++;
+          }
+          if (moveUpRight.x == snakeBody[b].x && moveUpRight.y == snakeBody[b].y) {
+            moveUpPriority++;
+            moveRightPriority++;
+          }
+          if (moveDownLeft.x == snakeBody[b].x && moveDownLeft.y == snakeBody[b].y) {
+            moveDownPriority++;
+            moveLeftPriority++;
+          }
+          if (moveDownRight.x == snakeBody[b].x && moveDownRight.y == snakeBody[b].y) {
+            moveDownPriority++;
+            moveRightPriority++;
+          }
+          if (moveUpLeftFurther.x == snakeBody[b].x && moveUpLeftFurther.y == snakeBody[b].y) {
+            moveUpPriority++;
+            moveLeftPriority++;
+            moveLeftPriority++;
+          }
+          if (moveDownLeftFurther.x == snakeBody[b].x && moveDownLeftFurther.y == snakeBody[b].y) {
+            moveDownPriority++;
+            moveLeftPriority++;
+            moveLeftPriority++;
+          }
+          if (moveLeftUpFurther.x == snakeBody[b].x && moveLeftUpFurther.y == snakeBody[b].y) {
+            moveLeftPriority++;
+            moveUpPriority++;
+            moveUpPriority++;
+          }
+          if (moveRightUpFurther.x == snakeBody[b].x && moveRightUpFurther.y == snakeBody[b].y) {
+            moveRightPriority++;
+            moveUpPriority++;
+            moveUpPriority++;
+          }
+          if (moveUpRightFurther.x == snakeBody[b].x && moveUpRightFurther.y == snakeBody[b].y) {
+            moveUpPriority++;
+            moveRightPriority++;
+            moveRightPriority++;
+          }
+          if (moveDownRightFurther.x == snakeBody[b].x && moveDownRightFurther.y == snakeBody[b].y) {
+            moveDownPriority++;
+            moveRightPriority++;
+            moveRightPriority++;
+          }
+          if (moveLeftDownFurther.x == snakeBody[b].x && moveLeftDownFurther.y == snakeBody[b].y) {
+            moveLeftPriority++;
+            moveDownPriority++;
+            moveDownPriority++;
+          }
+          if (moveRightDownFurther.x == snakeBody[b].x && moveRightDownFurther.y == snakeBody[b].y) {
+            moveRightPriority++;
+            moveDownPriority++;
+            moveDownPriority++;
+          }
         }
       }
 
