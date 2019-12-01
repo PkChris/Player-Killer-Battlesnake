@@ -91,22 +91,6 @@ app.post('/move', (request, response) => {
     x: head.x + 1,
     y: head.y + 1
   }
-  var moveLeftLookUp = {
-    x: head.x - 1,
-    y: head.y - 1
-  }
-  var moveLeftDown = {
-    x: head.x - 1,
-    y: head.y + 1
-  }
-  var moveRightDown = {
-    x: head.x + 1,
-    y: head.y - 1
-  }
-  var moveRightLookDown = {
-    x: head.x + 1,
-    y: head.y + 1
-  }
   var moveUpFurther = {
     x: head.x,
     y: head.y - 2
@@ -124,36 +108,36 @@ app.post('/move', (request, response) => {
     y: head.y
   }
   var moveUpLeftFurther = {
+    x: head.x - 2,
+    y: head.y - 1
+  }
+  var moveDownLeftFurther = {
+    x: head.x - 2,
+    y: head.y + 1
+  }
+  var moveLeftUpFurther = {
     x: head.x - 1,
+    y: head.y - 2
+  }
+  var moveRightUpFurther = {
+    x: head.x + 1,
     y: head.y - 2
   }
   var moveUpRightFurther = {
-    x: head.x + 1,
-    y: head.y - 2
+    x: head.x + 2,
+    y: head.y - 1
   }
-  var moveDownLeftFurther = {
+  var moveDownRightFurther = {
+    x: head.x + 2,
+    y: head.y + 1
+  }
+  var moveLeftDownFurther = {
     x: head.x - 1,
     y: head.y + 2
   }
-  var moveDownRightFurther = {
+  var moveRightDownFurther = {
     x: head.x + 1,
     y: head.y + 2
-  }
-  var moveLeftUpFurther = {
-    x: head.x - 2,
-    y: head.y - 1
-  }
-  var moveLeftDownFurther = {
-    x: head.x - 2,
-    y: head.y + 1
-  }
-  var moveRightUpFurther = {
-    x: head.x + 2,
-    y: head.y - 1
-  }
-  var moveRightDownFurther = {
-    x: head.x + 2,
-    y: head.y + 1
   }
   var moveUpEvenFurther = {
     x: head.x,
@@ -237,51 +221,59 @@ app.post('/move', (request, response) => {
       }
       if (moveUpLeft.x == snakeBody[b].x && moveUpLeft.y == snakeBody[b].y) {
         moveUpPriority++;
+        moveLeftPriority++;
       }
       if (moveUpRight.x == snakeBody[b].x && moveUpRight.y == snakeBody[b].y) {
-        moveDownPriority++;
+        moveUpPriority++;
+        moveRightPriority++;
       }
       if (moveDownLeft.x == snakeBody[b].x && moveDownLeft.y == snakeBody[b].y) {
+        moveDownPriority++;
         moveLeftPriority++;
       }
       if (moveDownRight.x == snakeBody[b].x && moveDownRight.y == snakeBody[b].y) {
-        moveRightPriority++;
-      }
-      if (moveLeftLookUp.x == snakeBody[b].x && moveLeftLookUp.y == snakeBody[b].y) {
-        moveUpPriority++;
-      }
-      if (moveLeftDown.x == snakeBody[b].x && moveLeftDown.y == snakeBody[b].y) {
         moveDownPriority++;
-      }
-      if (moveRightDown.x == snakeBody[b].x && moveRightDown.y == snakeBody[b].y) {
-        moveLeftPriority++;
-      }
-      if (moveRightLookDown.x == snakeBody[b].x && moveRightLookDown.y == snakeBody[b].y) {
         moveRightPriority++;
       }
       if (moveUpLeftFurther.x == snakeBody[b].x && moveUpLeftFurther.y == snakeBody[b].y) {
         moveUpPriority++;
-      }
-      if (moveUpRightFurther.x == snakeBody[b].x && moveUpRightFurther.y == snakeBody[b].y) {
-        moveDownPriority++;
+        moveLeftPriority++;
+        moveLeftPriority++;
       }
       if (moveDownLeftFurther.x == snakeBody[b].x && moveDownLeftFurther.y == snakeBody[b].y) {
+        moveDownPriority++;
         moveLeftPriority++;
-      }
-      if (moveDownRightFurther.x == snakeBody[b].x && moveDownRightFurther.y == snakeBody[b].y) {
-        moveRightPriority++;
+        moveLeftPriority++;
       }
       if (moveLeftUpFurther.x == snakeBody[b].x && moveLeftUpFurther.y == snakeBody[b].y) {
+        moveLeftPriority++;
+        moveUpPriority++;
         moveUpPriority++;
       }
-      if (moveLeftDownFurther.x == snakeBody[b].x && moveLeftDownFurther.y == snakeBody[b].y) {
-        moveDownPriority++;
-      }
       if (moveRightUpFurther.x == snakeBody[b].x && moveRightUpFurther.y == snakeBody[b].y) {
+        moveRightPriority++;
+        moveUpPriority++;
+        moveUpPriority++;
+      }
+      if (moveUpRightFurther.x == snakeBody[b].x && moveUpRightFurther.y == snakeBody[b].y) {
+        moveUpPriority++;
+        moveRightPriority++;
+        moveRightPriority++;
+      }
+      if (moveDownRightFurther.x == snakeBody[b].x && moveDownRightFurther.y == snakeBody[b].y) {
+        moveDownPriority++;
+        moveRightPriority++;
+        moveRightPriority++;
+      }
+      if (moveLeftDownFurther.x == snakeBody[b].x && moveLeftDownFurther.y == snakeBody[b].y) {
         moveLeftPriority++;
+        moveDownPriority++;
+        moveDownPriority++;
       }
       if (moveRightDownFurther.x == snakeBody[b].x && moveRightDownFurther.y == snakeBody[b].y) {
         moveRightPriority++;
+        moveDownPriority++;
+        moveDownPriority++;
       }
     }
   }
