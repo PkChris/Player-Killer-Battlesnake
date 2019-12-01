@@ -43,6 +43,8 @@ app.post('/move', (request, response) => {
   // Board information
   var width = request.body.board.width - 1;
   var height = request.body.board.height - 1;
+  var widthMinusOne = width - 1;
+  var heightMinusOne = height - 1;
   var widthHalf = width / 2;
   var heightHalf = height / 2;
   var head = request.body.you.body[0];
@@ -72,19 +74,19 @@ app.post('/move', (request, response) => {
     x: head.x + 1,
     y: head.y
   }
-  var moveUpLookLeft = {
+  var moveUpLeft = {
     x: head.x - 1,
     y: head.y - 1
   }
-  var moveUpLookRight = {
+  var moveUpRight = {
     x: head.x + 1,
     y: head.y - 1
   }
-  var moveDownLookLeft = {
+  var moveDownLeft = {
     x: head.x - 1,
     y: head.y + 1
   }
-  var moveDownLookRight = {
+  var moveDownRight = {
     x: head.x + 1,
     y: head.y + 1
   }
@@ -120,35 +122,35 @@ app.post('/move', (request, response) => {
     x: head.x + 2,
     y: head.y
   }
-  var moveUpFurtherLookLeft = {
+  var moveUpLeftFurther = {
     x: head.x - 1,
     y: head.y - 2
   }
-  var moveUpFurtherLookRight = {
+  var moveUpRightFurther = {
     x: head.x + 1,
     y: head.y - 2
   }
-  var moveDownFurtherLookLeft = {
+  var moveDownLeftFurther = {
     x: head.x - 1,
     y: head.y + 2
   }
-  var moveDownFurtherLookRight = {
+  var moveDownRightFurther = {
     x: head.x + 1,
     y: head.y + 2
   }
-  var moveLeftFurtherLookUp = {
+  var moveLeftUpFurther = {
     x: head.x - 2,
     y: head.y - 1
   }
-  var moveLeftFurtherLookDown = {
+  var moveLeftDownFurther = {
     x: head.x - 2,
     y: head.y + 1
   }
-  var moveRightFurtherLookUp = {
+  var moveRightUpFurther = {
     x: head.x + 2,
     y: head.y - 1
   }
-  var moveRightFurtherLookDown = {
+  var moveRightDownFurther = {
     x: head.x + 2,
     y: head.y + 1
   }
@@ -169,7 +171,7 @@ app.post('/move', (request, response) => {
     y: head.y
   }
 
-  // Movement priorities. Higher numbers are worse decisions
+  // Movement priorities. 1 is added to each direction for every negative action.
   var moveUpPriority = 0;
   var moveDownPriority = 0;
   var moveLeftPriority = 0;
@@ -192,7 +194,7 @@ app.post('/move', (request, response) => {
         right = false;
       }
 
-      // Tally up movement priorities
+      // Take the most open route
       if (moveUpFurther.x == snakeBody[b].x && moveUpFurther.y == snakeBody[b].y) {
         moveUpPriority++;
       }
@@ -205,16 +207,16 @@ app.post('/move', (request, response) => {
       if (moveRightFurther.x == snakeBody[b].x && moveRightFurther.y == snakeBody[b].y) {
         moveRightPriority++;
       }
-      if (moveUpLookLeft.x == snakeBody[b].x && moveUpLookLeft.y == snakeBody[b].y) {
+      if (moveUpLeft.x == snakeBody[b].x && moveUpLeft.y == snakeBody[b].y) {
         moveUpPriority++;
       }
-      if (moveUpLookRight.x == snakeBody[b].x && moveUpLookRight.y == snakeBody[b].y) {
+      if (moveUpRight.x == snakeBody[b].x && moveUpRight.y == snakeBody[b].y) {
         moveDownPriority++;
       }
-      if (moveDownLookLeft.x == snakeBody[b].x && moveDownLookLeft.y == snakeBody[b].y) {
+      if (moveDownLeft.x == snakeBody[b].x && moveDownLeft.y == snakeBody[b].y) {
         moveLeftPriority++;
       }
-      if (moveDownLookRight.x == snakeBody[b].x && moveDownLookRight.y == snakeBody[b].y) {
+      if (moveDownRight.x == snakeBody[b].x && moveDownRight.y == snakeBody[b].y) {
         moveRightPriority++;
       }
       if (moveLeftLookUp.x == snakeBody[b].x && moveLeftLookUp.y == snakeBody[b].y) {
@@ -229,28 +231,28 @@ app.post('/move', (request, response) => {
       if (moveRightLookDown.x == snakeBody[b].x && moveRightLookDown.y == snakeBody[b].y) {
         moveRightPriority++;
       }
-      if (moveUpFurtherLookLeft.x == snakeBody[b].x && moveUpFurtherLookLeft.y == snakeBody[b].y) {
+      if (moveUpLeftFurther.x == snakeBody[b].x && moveUpLeftFurther.y == snakeBody[b].y) {
         moveUpPriority++;
       }
-      if (moveUpFurtherLookRight.x == snakeBody[b].x && moveUpFurtherLookRight.y == snakeBody[b].y) {
+      if (moveUpRightFurther.x == snakeBody[b].x && moveUpRightFurther.y == snakeBody[b].y) {
         moveDownPriority++;
       }
-      if (moveDownFurtherLookLeft.x == snakeBody[b].x && moveDownFurtherLookLeft.y == snakeBody[b].y) {
+      if (moveDownLeftFurther.x == snakeBody[b].x && moveDownLeftFurther.y == snakeBody[b].y) {
         moveLeftPriority++;
       }
-      if (moveDownFurtherLookRight.x == snakeBody[b].x && moveDownFurtherLookRight.y == snakeBody[b].y) {
+      if (moveDownRightFurther.x == snakeBody[b].x && moveDownRightFurther.y == snakeBody[b].y) {
         moveRightPriority++;
       }
-      if (moveLeftFurtherLookUp.x == snakeBody[b].x && moveLeftFurtherLookUp.y == snakeBody[b].y) {
+      if (moveLeftUpFurther.x == snakeBody[b].x && moveLeftUpFurther.y == snakeBody[b].y) {
         moveUpPriority++;
       }
-      if (moveLeftFurtherLookDown.x == snakeBody[b].x && moveLeftFurtherLookDown.y == snakeBody[b].y) {
+      if (moveLeftDownFurther.x == snakeBody[b].x && moveLeftDownFurther.y == snakeBody[b].y) {
         moveDownPriority++;
       }
-      if (moveRightFurtherLookUp.x == snakeBody[b].x && moveRightFurtherLookUp.y == snakeBody[b].y) {
+      if (moveRightUpFurther.x == snakeBody[b].x && moveRightUpFurther.y == snakeBody[b].y) {
         moveLeftPriority++;
       }
-      if (moveRightFurtherLookDown.x == snakeBody[b].x && moveRightFurtherLookDown.y == snakeBody[b].y) {
+      if (moveRightDownFurther.x == snakeBody[b].x && moveRightDownFurther.y == snakeBody[b].y) {
         moveRightPriority++;
       }
       if (moveUpEvenFurther.x == snakeBody[b].x && moveUpEvenFurther.y == snakeBody[b].y) {
@@ -268,7 +270,7 @@ app.post('/move', (request, response) => {
     }
   }
 
-  // Keep snake on board and make him avoid corners
+  // Keep snake on board and avoid corners when traversing the edge of the board
   if (head.y == 0) {
     up = false;
 
@@ -298,6 +300,44 @@ app.post('/move', (request, response) => {
   }
   if (head.x == width) {
     right = false;
+
+    if (head.y < heightHalf) {
+      moveUpPriority++;
+    } else {
+      moveDownPriority++;
+    }
+  }
+
+  // Avoid the edge of the board and avoid corners when traversing the second last row or column of the board
+  if (head.y == 1) {
+    moveUpPriority++;
+
+    if (head.x < widthHalf) {
+      moveLeftPriority++;
+    } else {
+      moveRightPriority++;
+    }
+  }
+  if (head.y == heightMinusOne) {
+    moveDownPriority++;
+
+    if (head.x < widthHalf) {
+      moveLeftPriority++;
+    } else {
+      moveRightPriority++;
+    }
+  }
+  if (head.x == 1) {
+    moveLeftPriority++;
+
+    if (head.y < heightHalf) {
+      moveUpPriority++;
+    } else {
+      moveDownPriority++;
+    }
+  }
+  if (head.x == widthMinusOne) {
+    moveRightPriority++;
 
     if (head.y < heightHalf) {
       moveUpPriority++;
@@ -361,7 +401,7 @@ app.post('/move', (request, response) => {
   var priorities = [];
   var finalDirections = [];
 
-  // Go for the food else store safe directions in array
+  // Store safe directions in array. If direction is food then only store that direction.
   if (up == 'food') {
     safeDirections.push('up');
   } else if (down == 'food') {
@@ -387,7 +427,7 @@ app.post('/move', (request, response) => {
     //sophisticated(directions);
   }
 
-  // Store priorities in array
+  // Store priorities in array for each direction the snake can travel
   if (up) {
     priorities.push(moveUpPriority);
   }
@@ -401,7 +441,7 @@ app.post('/move', (request, response) => {
     priorities.push(moveRightPriority);
   }
 
-  // Match priorities to safe directions
+  // Match priorities to safe directions by merging arrays
   for (i = 0; i < safeDirections.length; i++) {
     finalDirections.push([safeDirections[i], priorities[i]]);
   }
