@@ -94,11 +94,11 @@ app.post('/move', (request, response) => {
     x: head.x - 1,
     y: head.y - 1
   }
-  var moveLeftLookDown = {
+  var moveLeftDown = {
     x: head.x - 1,
     y: head.y + 1
   }
-  var moveRightLookUp = {
+  var moveRightDown = {
     x: head.x + 1,
     y: head.y - 1
   }
@@ -172,10 +172,10 @@ app.post('/move', (request, response) => {
   }
 
   // Movement priorities. 1 is added to each direction for every negative action.
-  var moveUpPriority = 0;
-  var moveDownPriority = 0;
-  var moveLeftPriority = 0;
-  var moveRightPriority = 0;
+  var moveUpPriority = 1;
+  var moveDownPriority = 1;
+  var moveLeftPriority = 1;
+  var moveRightPriority = 1;
 
   // Keep snake from touching other snakes or eating itself
   for (s = 0; s < snakes.length; s++) {
@@ -194,17 +194,25 @@ app.post('/move', (request, response) => {
         right = false;
       }
 
-      // Take the most open route
+      // Choose the safest open route
       if (moveUpFurther.x == snakeBody[b].x && moveUpFurther.y == snakeBody[b].y) {
+        moveUpPriority++;
+      } else if (moveUpEvenFurther.x == snakeBody[b].x && moveUpEvenFurther.y == snakeBody[b].y) {
         moveUpPriority++;
       }
       if (moveDownFurther.x == snakeBody[b].x && moveDownFurther.y == snakeBody[b].y) {
         moveDownPriority++;
+      } else if (moveDownEvenFurther.x == snakeBody[b].x && moveDownEvenFurther.y == snakeBody[b].y) {
+        moveDownPriority++;
       }
       if (moveLeftFurther.x == snakeBody[b].x && moveLeftFurther.y == snakeBody[b].y) {
         moveLeftPriority++;
+      } else if (moveLeftEvenFurther.x == snakeBody[b].x && moveLeftEvenFurther.y == snakeBody[b].y) {
+        moveLeftPriority++;
       }
       if (moveRightFurther.x == snakeBody[b].x && moveRightFurther.y == snakeBody[b].y) {
+        moveRightPriority++;
+      } else if (moveRightEvenFurther.x == snakeBody[b].x && moveRightEvenFurther.y == snakeBody[b].y) {
         moveRightPriority++;
       }
       if (moveUpLeft.x == snakeBody[b].x && moveUpLeft.y == snakeBody[b].y) {
@@ -222,10 +230,10 @@ app.post('/move', (request, response) => {
       if (moveLeftLookUp.x == snakeBody[b].x && moveLeftLookUp.y == snakeBody[b].y) {
         moveUpPriority++;
       }
-      if (moveLeftLookDown.x == snakeBody[b].x && moveLeftLookDown.y == snakeBody[b].y) {
+      if (moveLeftDown.x == snakeBody[b].x && moveLeftDown.y == snakeBody[b].y) {
         moveDownPriority++;
       }
-      if (moveRightLookUp.x == snakeBody[b].x && moveRightLookUp.y == snakeBody[b].y) {
+      if (moveRightDown.x == snakeBody[b].x && moveRightDown.y == snakeBody[b].y) {
         moveLeftPriority++;
       }
       if (moveRightLookDown.x == snakeBody[b].x && moveRightLookDown.y == snakeBody[b].y) {
@@ -253,18 +261,6 @@ app.post('/move', (request, response) => {
         moveLeftPriority++;
       }
       if (moveRightDownFurther.x == snakeBody[b].x && moveRightDownFurther.y == snakeBody[b].y) {
-        moveRightPriority++;
-      }
-      if (moveUpEvenFurther.x == snakeBody[b].x && moveUpEvenFurther.y == snakeBody[b].y) {
-        moveUpPriority++;
-      }
-      if (moveDownEvenFurther.x == snakeBody[b].x && moveDownEvenFurther.y == snakeBody[b].y) {
-        moveDownPriority++;
-      }
-      if (moveLeftEvenFurther.x == snakeBody[b].x && moveLeftEvenFurther.y == snakeBody[b].y) {
-        moveLeftPriority++;
-      }
-      if (moveRightEvenFurther.x == snakeBody[b].x && moveRightEvenFurther.y == snakeBody[b].y) {
         moveRightPriority++;
       }
     }
@@ -364,23 +360,23 @@ app.post('/move', (request, response) => {
 
     // Head towards food in same row or column as snake's head and priority is at 0
     if (head.x == food[f].x && head.y > food[f].y) {
-      if (up == true && moveUpPriority == 0) {
-        up = 'food';
+      if (up == true) {
+        moveUpPriority--;
       }
     }
     if (head.x == food[f].x && head.y < food[f].y) {
-      if (down == true && moveDownPriority == 0) {
-        down = 'food';
+      if (down == true) {
+        moveDownPriority--;
       }
     }
     if (head.y == food[f].y && head.x > food[f].x) {
-      if (left == true && moveLeftPriority == 0) {
-        left = 'food';
+      if (left == true) {
+        moveLeftPriority--;
       }
     }
     if (head.y == food[f].y && head.x < food[f].x) {
-      if (right == true && moveRightPriority == 0) {
-        right = 'food';
+      if (right == true) {
+        moveRightPriority--;
       }
     }
   }
