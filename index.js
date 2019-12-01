@@ -157,10 +157,10 @@ app.post('/move', (request, response) => {
   }
 
   // Movement priorities. 1 is added to each direction for every negative action.
-  var moveUpPriority = 1;
-  var moveDownPriority = 1;
-  var moveLeftPriority = 1;
-  var moveRightPriority = 1;
+  var moveUpPriority = 10;
+  var moveDownPriority = 10;
+  var moveLeftPriority = 10;
+  var moveRightPriority = 10;
 
   // Keep snake from touching other snakes or eating itself
   for (s = 0; s < snakes.length; s++) {
@@ -180,6 +180,32 @@ app.post('/move', (request, response) => {
           }
           if (moveRight.x == snakeBody[b].x && moveRight.y == snakeBody[b].y) {
             right = 'food';
+          }
+
+          // Head towards edible snake heads in same row or column
+          if (moveUpFurther.x == snakeBody[b].x && moveUpFurther.y == snakeBody[b].y) {
+            moveUpPriority--;
+          }
+          if (moveDownFurther.x == snakeBody[b].x && moveDownFurther.y == snakeBody[b].y) {
+            moveDownPriority--;
+          }
+          if (moveLeftFurther.x == snakeBody[b].x && moveLeftFurther.y == snakeBody[b].y) {
+            moveLeftPriority--;
+          }
+          if (moveRightFurther.x == snakeBody[b].x && moveRightFurther.y == snakeBody[b].y) {
+            moveRightPriority--;
+          }
+          if (moveUpEvenFurther.x == snakeBody[b].x && moveUpEvenFurther.y == snakeBody[b].y) {
+            moveUpPriority--;
+          }
+          if (moveDownEvenFurther.x == snakeBody[b].x && moveDownEvenFurther.y == snakeBody[b].y) {
+            moveDownPriority--;
+          }
+          if (moveLeftEvenFurther.x == snakeBody[b].x && moveLeftEvenFurther.y == snakeBody[b].y) {
+            moveLeftPriority--;
+          }
+          if (moveRightEvenFurther.x == snakeBody[b].x && moveRightEvenFurther.y == snakeBody[b].y) {
+            moveRightPriority--;
           }
         }
       }
@@ -370,7 +396,7 @@ app.post('/move', (request, response) => {
       right = 'food';
     }
 
-    // Head towards food in same row or column as snake's head and priority is at 0
+    // Head towards food in same row or column
     if (head.x == food[f].x && head.y > food[f].y) {
       if (up == true) {
         moveUpPriority--;
