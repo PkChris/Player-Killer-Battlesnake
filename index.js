@@ -48,6 +48,7 @@ app.post('/move', (request, response) => {
   var widthHalf = width / 2;
   var heightHalf = height / 2;
   var head = request.body.you.body[0];
+  var body = request.body.you.body;
   var snakes = request.body.board.snakes;
   var food = request.body.board.food;
 
@@ -181,6 +182,25 @@ app.post('/move', (request, response) => {
   for (s = 0; s < snakes.length; s++) {
     snakeBody = snakes[s].body;
     for (b = 0; b < snakeBody.length; b++) {
+      // Eat adjacent snake heads if health permits
+      if (snakeBody[0].x == snakeBody[b].x && snakeBody[0].y == snakeBody[b].y) {
+        if (body.length > snakeBody.length) {
+          if (moveUp.x == snakeBody[b].x && moveUp.y == snakeBody[b].y) {
+            up = 'food';
+          }
+          if (moveDown.x == snakeBody[b].x && moveDown.y == snakeBody[b].y) {
+            down = 'food';
+          }
+          if (moveLeft.x == snakeBody[b].x && moveLeft.y == snakeBody[b].y) {
+            left = 'food';
+          }
+          if (moveRight.x == snakeBody[b].x && moveRight.y == snakeBody[b].y) {
+            right = 'food';
+          }
+        }
+      }
+
+      // Do not collide with other snakes
       if (moveUp.x == snakeBody[b].x && moveUp.y == snakeBody[b].y) {
         up = false;
       }
@@ -344,7 +364,7 @@ app.post('/move', (request, response) => {
 
   // Seek out food
   for (f = 0; f < food.length; f++) {
-    // Eat food directly next to snake's head
+    // Eat adjacent food
     if (moveUp.x == food[f].x && moveUp.y == food[f].y) {
       up = 'food';
     }
@@ -381,18 +401,6 @@ app.post('/move', (request, response) => {
     }
   }
 
-  /* Sophisticated decision chooser
-  function sophisticated(a) {
-    var j, x, i;
-    for (i = a.length - 1; i > 0; i--) {
-        j = Math.floor(Math.random() * (i + 1));
-        x = a[i];
-        a[i] = a[j];
-        a[j] = x;
-    }
-    return a;
-  }*/
-
   var safeDirections = [];
   var priorities = [];
   var finalDirections = [];
@@ -419,8 +427,6 @@ app.post('/move', (request, response) => {
     if (right) {
       safeDirections.push('right');
     }
-
-    //sophisticated(directions);
   }
 
   // Store priorities in array for each direction the snake can travel
@@ -441,6 +447,19 @@ app.post('/move', (request, response) => {
   for (i = 0; i < safeDirections.length; i++) {
     finalDirections.push([safeDirections[i], priorities[i]]);
   }
+
+  /* Randomize order so up and down aren't prioritized over left and right if priority is equal
+  function randomize(a) {
+    var j, x, i;
+    for (i = a.length - 1; i > 0; i--) {
+        j = Math.floor(Math.random() * (i + 1));
+        x = a[i];
+        a[i] = a[j];
+        a[j] = x;
+    }
+    return a;
+  }*/
+  //randomize(finalDirections);
 
   // Sort descending by Priority
   function sortDescendingSecondColumn(a, b) {
