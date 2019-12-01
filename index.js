@@ -182,7 +182,7 @@ app.post('/move', (request, response) => {
             right = 'food';
           }
 
-          // Head towards edible snake heads in same row or column
+          // Head towards edible snake heads
           if (moveUpFurther.x == snakeBody[b].x && moveUpFurther.y == snakeBody[b].y) {
             moveUpPriority--;
           }
@@ -207,10 +207,26 @@ app.post('/move', (request, response) => {
           if (moveRightEvenFurther.x == snakeBody[b].x && moveRightEvenFurther.y == snakeBody[b].y) {
             moveRightPriority--;
           }
+          if (moveUpLeft.x == snakeBody[b].x && moveUpLeft.y == snakeBody[b].y) {
+            moveUpPriority--;
+            moveLeftPriority--;
+          }
+          if (moveUpRight.x == snakeBody[b].x && moveUpRight.y == snakeBody[b].y) {
+            moveUpPriority--;
+            moveRightPriority--;
+          }
+          if (moveDownLeft.x == snakeBody[b].x && moveDownLeft.y == snakeBody[b].y) {
+            moveDownPriority--;
+            moveLeftPriority--;
+          }
+          if (moveDownRight.x == snakeBody[b].x && moveDownRight.y == snakeBody[b].y) {
+            moveDownPriority--;
+            moveRightPriority--;
+          }
         }
       }
 
-      // Do not collide with other snakes
+      // Do not collide with other snake's bodies
       if (moveUp.x == snakeBody[b].x && moveUp.y == snakeBody[b].y) {
         up = false;
       }
@@ -222,6 +238,22 @@ app.post('/move', (request, response) => {
       }
       if (moveRight.x == snakeBody[b].x && moveRight.y == snakeBody[b].y) {
         right = false;
+      }
+
+      // Another snake's tail is a safe direction
+      if (snakeBody[snakeBody.length - 1].x == snakeBody[b].x && snakeBody[snakeBody.length - 1].y == snakeBody[b].y) {
+        if (moveUp.x == snakeBody[b].x && moveUp.y == snakeBody[b].y) {
+          up = true;
+        }
+        if (moveDown.x == snakeBody[b].x && moveDown.y == snakeBody[b].y) {
+          down = true;
+        }
+        if (moveLeft.x == snakeBody[b].x && moveLeft.y == snakeBody[b].y) {
+          left = true;
+        }
+        if (moveRight.x == snakeBody[b].x && moveRight.y == snakeBody[b].y) {
+          right = true;
+        }
       }
 
       // Choose the safest open route
